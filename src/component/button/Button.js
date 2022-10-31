@@ -10,7 +10,7 @@ const ButtonStyles = styled.button`
   font-weight: 600;
   width: 100%;
   line-height: 1;
-  height: ${(props) => props.height || "55px"};
+  height: ${(props) => props.height || "52px"};
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;

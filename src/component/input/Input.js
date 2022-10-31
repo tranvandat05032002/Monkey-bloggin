@@ -10,7 +10,7 @@ const InputStyles = styled.div`
       props.hasIcon ? "calc(100% - calc(60px + 20px))" : "calc(100% - 40px)"};
     max-width: 600px;
     padding: ${(props) =>
-      props.hasIcon ? "16px 60px 16px 20px" : "17px 20px;"};
+      props.hasIcon ? "17px 60px 17px 20px" : "17px 20px;"};
     border: none;
     outline: none;
     border-radius: 8px;

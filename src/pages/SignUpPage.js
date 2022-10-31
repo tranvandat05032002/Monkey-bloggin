@@ -28,10 +28,18 @@ const SignUpPage = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
     watch,
-  } = useForm();
-  const handleSignUp = () => {};
+  } = useForm({
+    mode: "onChange",
+  });
+  const handleSignUp = (value) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 500);
+    });
+  };
   return (
     <SignUpPageStyles>
       <div className="container">
@@ -60,7 +68,15 @@ const SignUpPage = () => {
             <Label htmlFor="password">password</Label>
             <InputPasswordToggle control={control}></InputPasswordToggle>
           </Field>
-          <Button type="submit" isLoading={false} disabled={false}>
+          <Button
+            type="submit"
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+            style={{
+              maxWidth: "300px",
+              margin: "0px auto",
+            }}
+          >
             Sign Up
           </Button>
         </form>
