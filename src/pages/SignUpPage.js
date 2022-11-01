@@ -5,6 +5,8 @@ import { Label } from "component/label";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -25,6 +27,20 @@ const SignUpPageStyles = styled.div`
   }
 `;
 const SignUpPage = () => {
+  const validateScheme = yup.object({
+    fullName: yup
+      .string()
+      .required("Please enter a your fullName")
+      .min(6, "must have at least 6 characters"),
+    emailAddress: yup
+      .string()
+      .required("Please enter your email address")
+      .email("Please enter valid email address"),
+    password: yup
+      .string()
+      .required("Please enter your password")
+      .min(8, "Your password must be at least 8 character or greater"),
+  });
   const {
     control,
     handleSubmit,
@@ -32,8 +48,10 @@ const SignUpPage = () => {
     watch,
   } = useForm({
     mode: "onChange",
+    resolver: yupResolver(validateScheme),
   });
-  const handleSignUp = (value) => {
+  console.log(errors);
+  const handleSubmitSignUp = (value) => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -45,7 +63,7 @@ const SignUpPage = () => {
       <div className="container">
         <img alt="monkey-blogging" srcSet="/logo.png 2x" className="logo" />
         <h1 className="heading">Monkey Blogging</h1>
-        <form className="form" onSubmit={handleSubmit(handleSignUp)}>
+        <form className="form" onSubmit={handleSubmit(handleSubmitSignUp)}>
           <Field>
             <Label htmlFor="fullName">Fullname</Label>
             <Input
