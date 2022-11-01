@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { toast } from "react-toastify";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -50,7 +51,6 @@ const SignUpPage = () => {
     mode: "onChange",
     resolver: yupResolver(validateScheme),
   });
-  console.log(errors);
   const handleSubmitSignUp = (value) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -58,6 +58,14 @@ const SignUpPage = () => {
       }, 500);
     });
   };
+  React.useEffect(() => {
+    const arrayErrors = Object.values(errors);
+    toast.error(arrayErrors[0]?.message, {
+      pauseOnHover: false,
+      delay: 0,
+    });
+  }, [errors]);
+
   return (
     <SignUpPageStyles>
       <div className="container">
@@ -78,7 +86,7 @@ const SignUpPage = () => {
             <Input
               control={control}
               name={"emailAddress"}
-              type="text"
+              type="email"
               placeholder="Enter your emailAddress"
             />
           </Field>
