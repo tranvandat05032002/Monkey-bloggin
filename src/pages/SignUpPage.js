@@ -8,7 +8,13 @@ import styled from "styled-components";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "firebase-app/firebase-config";
+import { useNavigate } from "react-router-dom";
+import { addDoc, collection } from "firebase/firestore";
+import PropTypes from "prop-types";
 
+//Styled
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
   padding: 40px;
@@ -28,6 +34,7 @@ const SignUpPageStyles = styled.div`
   }
 `;
 const SignUpPage = () => {
+  //Yup validation
   const validateScheme = yup.object({
     fullName: yup
       .string()
@@ -51,19 +58,40 @@ const SignUpPage = () => {
     mode: "onChange",
     resolver: yupResolver(validateScheme),
   });
-  const handleSubmitSignUp = (value) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 500);
-    });
+  //Hook
+  const navigate = useNavigate();
+  //Handle
+  const handleSubmitSignUp = async (values) => {
+    if (!isValid) return;
+    try {
+      const user = await createUserWithEmailAndPassword(
+        auth,
+        values.emailAddress,
+        values.password
+      );
+      toast.success("Register successFully");
+      await updateProfile(auth.currentUser, {
+        displayName: values.fullName,
+      });
+      navigate("/");
+      const colRef = collection(db, "users");
+      await addDoc(colRef, {
+        fullName: values.fullName,
+        email: values.emailAddress,
+        password: values.password,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   React.useEffect(() => {
     const arrayErrors = Object.values(errors);
-    toast.error(arrayErrors[0]?.message, {
-      pauseOnHover: false,
-      delay: 0,
-    });
+    if (arrayErrors.length > 0) {
+      toast.error(arrayErrors[0]?.message, {
+        pauseOnHover: false,
+        delay: 0,
+      });
+    }
   }, [errors]);
 
   return (
@@ -109,6 +137,12 @@ const SignUpPage = () => {
       </div>
     </SignUpPageStyles>
   );
+};
+
+Button.propTypes = {
+  // type: PropTypes.oneOf(["button or submit"]).isRequired,
+  isLoading: PropTypes.bool,
+  children: PropTypes.node,
 };
 
 export default SignUpPage;
