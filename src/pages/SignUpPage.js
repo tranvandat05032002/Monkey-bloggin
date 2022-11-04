@@ -10,7 +10,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "firebase-app/firebase-config";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import PropTypes from "prop-types";
 import AuthenticationPage from "./AuthenticationPage";
@@ -42,7 +42,11 @@ const SignUpPage = () => {
   });
   //Hook
   const navigate = useNavigate();
+  React.useEffect(() => {
+    document.title = "Register";
+  }, []);
   //Handle
+
   const handleSubmitSignUp = async (values) => {
     if (!isValid) return;
     try {
@@ -78,7 +82,11 @@ const SignUpPage = () => {
 
   return (
     <AuthenticationPage>
-      <form className="form" onSubmit={handleSubmit(handleSubmitSignUp)}>
+      <form
+        className="form"
+        onSubmit={handleSubmit(handleSubmitSignUp)}
+        autoComplete="off"
+      >
         <Field>
           <Label htmlFor="fullName">Fullname</Label>
           <Input
@@ -101,6 +109,9 @@ const SignUpPage = () => {
           <Label htmlFor="password">password</Label>
           <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
+        <div className="have-account">
+          You already have an account? <NavLink to={"/sign-up"}>Login</NavLink>
+        </div>
         <Button
           type="submit"
           isLoading={isSubmitting}

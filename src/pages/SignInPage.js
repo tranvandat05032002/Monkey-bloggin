@@ -10,7 +10,10 @@ import AuthenticationPage from "./AuthenticationPage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-// import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "firebase-app/firebase-config";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "context/auth-context";
 
 const SignInPage = () => {
   const validateScheme = yup.object({
@@ -41,19 +44,29 @@ const SignInPage = () => {
       });
     }
   }, [errors]);
-  //   const { userInfo } = useAuth();
-  //   const navigate = useNavigate();
-  //   React.useEffect(() => {
-  //     !userInfo.email ? navigate("/sign-up") : navigate("/");
-  //   }, []);
-  //   console.log(userInfo);
+  const { userInfo } = useAuth();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    document.title = "Login";
+    if (userInfo?.email) navigate("/");
+  }, [userInfo]);
   const handleSignIn = async (values) => {
-    console.log(values);
+    if (!isValid) return;
+    await signInWithEmailAndPassword(
+      auth,
+      values.emailAddress,
+      values.password
+    );
+    navigate("/");
   };
   return (
     <div>
       <AuthenticationPage>
-        <form className="form" onSubmit={handleSubmit(handleSignIn)}>
+        <form
+          className="form"
+          onSubmit={handleSubmit(handleSignIn)}
+          autoComplete="off"
+        >
           <Field>
             <Label htmlFor="emailAddress">Email address</Label>
             <Input
@@ -67,7 +80,10 @@ const SignInPage = () => {
             <Label htmlFor="password">Password</Label>
             <InputPasswordToggle control={control}></InputPasswordToggle>
           </Field>
-
+          <div className="have-account">
+            You have not had an account?{" "}
+            <NavLink to={"/sign-up"}>Register an account</NavLink>
+          </div>
           <Button
             type="submit"
             isLoading={isSubmitting}

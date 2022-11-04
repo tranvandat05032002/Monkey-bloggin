@@ -1,3 +1,4 @@
+import HomePage from "pages/HomePage";
 import SignInPage from "pages/SignInPage";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -9,8 +10,9 @@ function App() {
     <div className="App">
       <AuthProvider>
         <Routes>
-          <Route element={<SignUpPage></SignUpPage>} path="/sign-up"></Route>
-          <Route element={<SignInPage></SignInPage>} path="/sign-in"></Route>
+          <Route path="/" element={<HomePage></HomePage>}></Route>
+          <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
+          <Route path="/sign-in" element={<SignInPage></SignInPage>}></Route>
         </Routes>
       </AuthProvider>
     </div>
