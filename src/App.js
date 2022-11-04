@@ -1,3 +1,4 @@
+import SignInPage from "pages/SignInPage";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./context/auth-context";
@@ -9,6 +10,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route element={<SignUpPage></SignUpPage>} path="/sign-up"></Route>
+          <Route element={<SignInPage></SignInPage>} path="/sign-in"></Route>
         </Routes>
       </AuthProvider>
     </div>

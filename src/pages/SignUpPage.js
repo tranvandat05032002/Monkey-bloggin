@@ -13,26 +13,8 @@ import { auth, db } from "firebase-app/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import PropTypes from "prop-types";
+import AuthenticationPage from "./AuthenticationPage";
 
-//Styled
-const SignUpPageStyles = styled.div`
-  min-height: 100vh;
-  padding: 40px;
-  .logo {
-    margin: 0 auto;
-  }
-  .heading {
-    text-align: center;
-    color: ${(props) => props.theme.primary};
-    font-weight: bold;
-    font-size: 40px;
-    margin-bottom: 60px;
-  }
-  .form {
-    max-width: 600px;
-    margin: 0px auto;
-  }
-`;
 const SignUpPage = () => {
   //Yup validation
   const validateScheme = yup.object({
@@ -95,47 +77,43 @@ const SignUpPage = () => {
   }, [errors]);
 
   return (
-    <SignUpPageStyles>
-      <div className="container">
-        <img alt="monkey-blogging" srcSet="/logo.png 2x" className="logo" />
-        <h1 className="heading">Monkey Blogging</h1>
-        <form className="form" onSubmit={handleSubmit(handleSubmitSignUp)}>
-          <Field>
-            <Label htmlFor="fullName">Fullname</Label>
-            <Input
-              control={control}
-              name={"fullName"}
-              type="text"
-              placeholder="Enter your fullName"
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="emailAddress">Email address</Label>
-            <Input
-              control={control}
-              name={"emailAddress"}
-              type="email"
-              placeholder="Enter your emailAddress"
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="password">password</Label>
-            <InputPasswordToggle control={control}></InputPasswordToggle>
-          </Field>
-          <Button
-            type="submit"
-            isLoading={isSubmitting}
-            disabled={isSubmitting}
-            style={{
-              maxWidth: "300px",
-              margin: "0px auto",
-            }}
-          >
-            Sign Up
-          </Button>
-        </form>
-      </div>
-    </SignUpPageStyles>
+    <AuthenticationPage>
+      <form className="form" onSubmit={handleSubmit(handleSubmitSignUp)}>
+        <Field>
+          <Label htmlFor="fullName">Fullname</Label>
+          <Input
+            control={control}
+            name={"fullName"}
+            type="text"
+            placeholder="Enter your fullName"
+          />
+        </Field>
+        <Field>
+          <Label htmlFor="emailAddress">Email address</Label>
+          <Input
+            control={control}
+            name={"emailAddress"}
+            type="email"
+            placeholder="Enter your emailAddress"
+          />
+        </Field>
+        <Field>
+          <Label htmlFor="password">password</Label>
+          <InputPasswordToggle control={control}></InputPasswordToggle>
+        </Field>
+        <Button
+          type="submit"
+          isLoading={isSubmitting}
+          disabled={isSubmitting}
+          style={{
+            maxWidth: "300px",
+            margin: "0px auto",
+          }}
+        >
+          Sign Up
+        </Button>
+      </form>
+    </AuthenticationPage>
   );
 };
 
