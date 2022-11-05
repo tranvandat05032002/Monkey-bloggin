@@ -1,7 +1,6 @@
 import HomePage from "pages/HomePage";
 import SignInPage from "pages/SignInPage";
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
 import { AuthProvider } from "./context/auth-context";
 import SignUpPage from "./pages/SignUpPage";
 

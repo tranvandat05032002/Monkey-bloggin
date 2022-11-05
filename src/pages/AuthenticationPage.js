@@ -6,6 +6,8 @@ const AuthenticationPageStyles = styled.div`
   padding: 40px;
   .logo {
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
   }
   .heading {
     text-align: center;

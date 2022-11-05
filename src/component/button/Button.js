@@ -13,6 +13,9 @@ const ButtonStyles = styled.button`
   height: ${(props) => props.height || "52px"};
   border-radius: 8px;
   font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   &:disabled {
     opacity: 0.5;

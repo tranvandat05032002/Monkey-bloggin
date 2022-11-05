@@ -6,19 +6,15 @@ const InputStyles = styled.div`
   position: relative;
   width: 100%;
   input {
-    width: ${(props) =>
-      props.hasIcon ? "calc(100% - calc(60px + 20px))" : "calc(100% - 40px)"};
-    max-width: 600px;
+    width: 100%;
     padding: ${(props) =>
-      props.hasIcon ? "17px 60px 17px 20px" : "17px 20px;"};
-    border: none;
-    outline: none;
+      props.hasIcon ? "16px 60px 16px 20px" : "16px 20px"};
+    background-color: transparent;
+    border: 1px solid #9999;
     border-radius: 8px;
-    border: 1px solid #999999;
-    font-weight: 500;
     transition: all 0.2s linear;
     color: ${(props) => props.theme.black};
-    font-style: 14px;
+    font-size: 14px;
   }
   input::-webkit-input-placeholder {
     color: ${(props) => props.theme.grayPlaceholder};
@@ -32,9 +28,9 @@ const InputStyles = styled.div`
   }
   .input-icon {
     position: absolute;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
-    right: 16px;
     cursor: pointer;
   }
 `;
