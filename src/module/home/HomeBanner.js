@@ -5,6 +5,7 @@ import styled from "styled-components";
 const HomeBannerStyles = styled.div`
   min-height: 520px;
   padding: 40px 0;
+  margin-bottom: 60px;
   background-image: linear-gradient(
     to right bottom,
     ${(props) => props.theme.primary},
@@ -43,7 +44,7 @@ const HomeBanner = () => {
               cupiditate porro, quidem molestiae impedit laudantium neque quo!
             </p>
             <div className="inline-block">
-              <Button to="/sign-up" kind="secondary">
+              <Button to="/sign-in" kind="secondary">
                 Get started
               </Button>
             </div>
