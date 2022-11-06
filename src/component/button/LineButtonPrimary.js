@@ -31,7 +31,6 @@ const LineButtonPrimary = ({
   ...props
 }) => {
   const { isLoading, to } = props;
-  console.log("🚀 ~ file: Button.js ~ line 34 ~ to", to);
   const child = !!isLoading ? <LoadingSniper></LoadingSniper> : children;
   let ButtonElement = "div";
   to ? (ButtonElement = NavLink) : (ButtonElement = "div");

@@ -1,4 +1,9 @@
-import { LineButtonPrimary, LineButtonSecondary } from "component/button";
+import {
+  ButtonPrimary,
+  LineButtonPrimary,
+  LineButtonSecondary,
+} from "component/button";
+import { useAuth } from "context/auth-context";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
@@ -50,6 +55,7 @@ const HeaderStyles = styled.header`
     display: flex;
     align-items: center;
     position: relative;
+    margin-right: 20px;
   }
   .search-input {
     flex: 1;
@@ -65,9 +71,23 @@ const HeaderStyles = styled.header`
     position: absolute;
     right: 15px;
   }
+  .header-auth {
+    gap: 20px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+  }
 `;
 
+function geLastName(newName) {
+  if (!newName) return "";
+  const length = newName.split(" ").length;
+  return newName.split(" ")[length - 1];
+}
+
 const Header = () => {
+  const { userInfo } = useAuth();
   return (
     <HeaderStyles>
       <div className="container">
@@ -85,7 +105,6 @@ const Header = () => {
             ))}
           </ul>
 
-          {/* <div className="header-right"> */}
           <div className="search">
             <input
               type="text"
@@ -123,23 +142,40 @@ const Header = () => {
               </svg>
             </span>
           </div>
-          <LineButtonSecondary
-            type="button"
-            className="header-button max-w-[115px] ml-5"
-            height="46px"
-            to="/sign-in"
-          >
-            Sign In
-          </LineButtonSecondary>
-          <LineButtonPrimary
-            type="button"
-            className="header-button max-w-[115px] ml-5"
-            height="46px"
-            to="/sign-up"
-          >
-            Sign Up
-          </LineButtonPrimary>
-          {/* </div> */}
+          {!userInfo ? (
+            <>
+              <LineButtonSecondary
+                type="button"
+                className="header-button max-w-[115px] ml-5"
+                height="46px"
+                to="/sign-in"
+              >
+                Sign In
+              </LineButtonSecondary>
+              <LineButtonPrimary
+                type="button"
+                className="header-button max-w-[115px] ml-5"
+                height="46px"
+                to="/sign-up"
+              >
+                Sign Up
+              </LineButtonPrimary>
+            </>
+          ) : (
+            <>
+              <div className="header-auth">
+                <strong>{geLastName(userInfo?.displayName)}</strong>
+                <ButtonPrimary
+                  type="button"
+                  className="header-button max-w-[115px] ml-5"
+                  height="46px"
+                  to="/sign-in"
+                >
+                  Log out
+                </ButtonPrimary>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </HeaderStyles>

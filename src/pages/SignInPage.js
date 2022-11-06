@@ -45,10 +45,6 @@ const SignInPage = () => {
     }
   }, [errors]);
   const { userInfo } = useAuth();
-  console.log(
-    "🚀 ~ file: SignInPage.js ~ line 48 ~ SignInPage ~ userInfo",
-    userInfo
-  );
   const navigate = useNavigate();
   React.useEffect(() => {
     document.title = "Login";
