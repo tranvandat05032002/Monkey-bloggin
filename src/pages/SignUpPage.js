@@ -1,4 +1,4 @@
-import { ButtonPrimary } from "component/button";
+import { Button } from "component/button";
 import Field from "component/field/Field";
 import { Input, InputPasswordToggle } from "component/input";
 import { Label } from "component/label";
@@ -111,7 +111,7 @@ const SignUpPage = () => {
         <div className="have-account">
           You already have an account? <NavLink to={"/sign-in"}>Login</NavLink>
         </div>
-        <ButtonPrimary
+        <Button
           type="submit"
           isLoading={isSubmitting}
           disabled={isSubmitting}
@@ -121,13 +121,13 @@ const SignUpPage = () => {
           }}
         >
           Sign Up
-        </ButtonPrimary>
+        </Button>
       </form>
     </AuthenticationPage>
   );
 };
 
-ButtonPrimary.propTypes = {
+Button.propTypes = {
   // type: PropTypes.oneOf(["button or submit"]).isRequired,
   isLoading: PropTypes.bool,
   children: PropTypes.node,

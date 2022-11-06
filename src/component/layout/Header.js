@@ -1,9 +1,7 @@
-import {
-  ButtonPrimary,
-  LineButtonPrimary,
-  LineButtonSecondary,
-} from "component/button";
+import { Button } from "component/button";
 import { useAuth } from "context/auth-context";
+import { auth } from "firebase-app/firebase-config";
+import { signOut } from "firebase/auth";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
@@ -88,6 +86,10 @@ function geLastName(newName) {
 
 const Header = () => {
   const { userInfo } = useAuth();
+  const handleLogOut = () => {
+    signOut(auth);
+  };
+
   return (
     <HeaderStyles>
       <div className="container">
@@ -142,37 +144,40 @@ const Header = () => {
               </svg>
             </span>
           </div>
-          {!userInfo ? (
+          {!userInfo || Object.values(userInfo).length === 0 ? (
             <>
-              <LineButtonSecondary
+              <Button
                 type="button"
                 className="header-button max-w-[115px] ml-5"
                 height="46px"
+                kind="LineSecondary"
                 to="/sign-in"
               >
                 Sign In
-              </LineButtonSecondary>
-              <LineButtonPrimary
+              </Button>
+              <Button
                 type="button"
                 className="header-button max-w-[115px] ml-5"
                 height="46px"
+                kind="LinePrimary"
                 to="/sign-up"
               >
                 Sign Up
-              </LineButtonPrimary>
+              </Button>
             </>
           ) : (
             <>
               <div className="header-auth">
                 <strong>{geLastName(userInfo?.displayName)}</strong>
-                <ButtonPrimary
+                <Button
                   type="button"
                   className="header-button max-w-[115px] ml-5"
                   height="46px"
                   to="/sign-in"
+                  onClick={handleLogOut}
                 >
                   Log out
-                </ButtonPrimary>
+                </Button>
               </div>
             </>
           )}

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // import { useAuth } from "context/auth-context";
-import { ButtonPrimary } from "component/button";
+import { Button } from "component/button";
 import Field from "component/field/Field";
 import { Input, InputPasswordToggle } from "component/input";
 import { Label } from "component/label";
@@ -84,7 +84,7 @@ const SignInPage = () => {
             You have not had an account?{" "}
             <NavLink to={"/sign-up"}>Register an account</NavLink>
           </div>
-          <ButtonPrimary
+          <Button
             type="submit"
             isLoading={isSubmitting}
             disabled={isSubmitting}
@@ -94,7 +94,7 @@ const SignInPage = () => {
             }}
           >
             Sign Up
-          </ButtonPrimary>
+          </Button>
         </form>
       </AuthenticationPage>
     </div>

@@ -1,11 +1,3 @@
-import ButtonPrimary from "./ButtonPrimary";
-import ButtonSecondary from "./ButtonSecondary";
-import LineButtonPrimary from "./LineButtonPrimary";
-import LineButtonSecondary from "./LineButtonSecondary";
+import Button from "./Button";
 
-export {
-  ButtonPrimary,
-  ButtonSecondary,
-  LineButtonPrimary,
-  LineButtonSecondary,
-};
+export { Button };
