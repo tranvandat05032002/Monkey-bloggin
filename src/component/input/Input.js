@@ -15,6 +15,7 @@ const InputStyles = styled.div`
     transition: all 0.2s linear;
     color: ${(props) => props.theme.black};
     font-size: 14px;
+    outline: none;
   }
   input::-webkit-input-placeholder {
     color: ${(props) => props.theme.grayPlaceholder};

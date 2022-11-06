@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // import { useAuth } from "context/auth-context";
-import { Button } from "component/button";
+import { ButtonPrimary } from "component/button";
 import Field from "component/field/Field";
 import { Input, InputPasswordToggle } from "component/input";
 import { Label } from "component/label";
@@ -45,10 +45,14 @@ const SignInPage = () => {
     }
   }, [errors]);
   const { userInfo } = useAuth();
+  console.log(
+    "🚀 ~ file: SignInPage.js ~ line 48 ~ SignInPage ~ userInfo",
+    userInfo
+  );
   const navigate = useNavigate();
   React.useEffect(() => {
     document.title = "Login";
-    if (userInfo?.email) navigate("/");
+    if (userInfo?.emailAddress) navigate("/");
   }, [userInfo]);
   const handleSignIn = async (values) => {
     if (!isValid) return;
@@ -84,7 +88,7 @@ const SignInPage = () => {
             You have not had an account?{" "}
             <NavLink to={"/sign-up"}>Register an account</NavLink>
           </div>
-          <Button
+          <ButtonPrimary
             type="submit"
             isLoading={isSubmitting}
             disabled={isSubmitting}
@@ -94,7 +98,7 @@ const SignInPage = () => {
             }}
           >
             Sign Up
-          </Button>
+          </ButtonPrimary>
         </form>
       </AuthenticationPage>
     </div>

@@ -1,10 +1,9 @@
-import { Button } from "component/button";
+import { ButtonPrimary } from "component/button";
 import Field from "component/field/Field";
 import { Input, InputPasswordToggle } from "component/input";
 import { Label } from "component/label";
 import React from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
@@ -59,7 +58,7 @@ const SignUpPage = () => {
       await updateProfile(auth.currentUser, {
         displayName: values.fullName,
       });
-      navigate("/");
+      navigate("/sign-in");
       const colRef = collection(db, "users");
       await addDoc(colRef, {
         fullName: values.fullName,
@@ -110,9 +109,9 @@ const SignUpPage = () => {
           <InputPasswordToggle control={control}></InputPasswordToggle>
         </Field>
         <div className="have-account">
-          You already have an account? <NavLink to={"/sign-up"}>Login</NavLink>
+          You already have an account? <NavLink to={"/sign-in"}>Login</NavLink>
         </div>
-        <Button
+        <ButtonPrimary
           type="submit"
           isLoading={isSubmitting}
           disabled={isSubmitting}
@@ -122,13 +121,13 @@ const SignUpPage = () => {
           }}
         >
           Sign Up
-        </Button>
+        </ButtonPrimary>
       </form>
     </AuthenticationPage>
   );
 };
 
-Button.propTypes = {
+ButtonPrimary.propTypes = {
   // type: PropTypes.oneOf(["button or submit"]).isRequired,
   isLoading: PropTypes.bool,
   children: PropTypes.node,

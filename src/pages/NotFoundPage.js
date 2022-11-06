@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import styled from "styled-components";
 const NotFoundPageStyles = styled.div`
   height: 100vh;
@@ -21,6 +21,9 @@ const NotFoundPageStyles = styled.div`
 `;
 
 const NotFoundPage = () => {
+  React.useEffect(() => {
+    document.title = "Not Found";
+  }, []);
   return (
     <NotFoundPageStyles>
       <div className="not-found">

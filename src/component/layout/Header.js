@@ -1,4 +1,4 @@
-import { Button } from "component/button";
+import { LineButtonPrimary, LineButtonSecondary } from "component/button";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
@@ -123,9 +123,22 @@ const Header = () => {
               </svg>
             </span>
           </div>
-          <Button className="header-button max-w-[120px] ml-5" height="46px">
+          <LineButtonSecondary
+            type="button"
+            className="header-button max-w-[115px] ml-5"
+            height="46px"
+            to="/sign-in"
+          >
+            Sign In
+          </LineButtonSecondary>
+          <LineButtonPrimary
+            type="button"
+            className="header-button max-w-[115px] ml-5"
+            height="46px"
+            to="/sign-up"
+          >
             Sign Up
-          </Button>
+          </LineButtonPrimary>
           {/* </div> */}
         </div>
       </div>
