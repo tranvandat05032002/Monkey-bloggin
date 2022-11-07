@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PostCategory from "./PostCategory";
+import PostTitle from "./PostTitle";
 const PostFeatureItemStyles = styled.div`
   width: 100%;
   border-radius: 16px;
@@ -41,6 +42,7 @@ const PostFeatureItemStyles = styled.div`
     }
     &-category {
       white-space: nowrap;
+      background-color: #f3f3f3;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100px;
@@ -60,13 +62,6 @@ const PostFeatureItemStyles = styled.div`
       height: 4px;
       background-color: currentColor;
       border-radius: 100rem;
-    }
-    &-title {
-      font-weight: bold;
-      line-height: 1.5;
-      display: block;
-      font-size: 22px;
-      color: white;
     }
   }
   @media screen and (min-width: 1024px) {
@@ -91,9 +86,9 @@ const PostFeatureItem = () => {
             <span className="post-author">Andiez Le</span>
           </div>
         </div>
-        <h3 className="post-title">
+        <PostTitle size="big">
           Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
-        </h3>
+        </PostTitle>
       </div>
     </PostFeatureItemStyles>
   );
