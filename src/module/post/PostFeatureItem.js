@@ -10,12 +10,6 @@ const PostFeatureItemStyles = styled.div`
   position: relative;
   height: 169px;
   .post {
-    &-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 16px;
-    }
     &-overlay {
       position: absolute;
       inset: 0;
@@ -49,6 +43,13 @@ const PostFeatureItemStyles = styled.div`
   }
   @media screen and (min-width: 1024px) {
     height: 272px;
+  }
+  @media screen and (max-width: 1023.98px) {
+    .post {
+      &-content {
+        padding: 15px;
+      }
+    }
   }
 `;
 const PostFeatureItem = () => {

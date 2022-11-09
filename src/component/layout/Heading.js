@@ -6,6 +6,7 @@ const HeadingStyles = styled.h2`
   position: relative;
   margin-bottom: 30px;
   font-family: "Montserrat", sans-serif;
+
   &:before {
     content: "";
     width: 50px;
@@ -15,6 +16,11 @@ const HeadingStyles = styled.h2`
     top: 0;
     left: 0;
     transform: translate(0, -150%);
+  }
+
+  @media screen and (max-width: 1023.98px) {
+    font-size: 22px;
+    margin-bottom: 20px;
   }
 `;
 const Heading = ({ className = "", children }) => {

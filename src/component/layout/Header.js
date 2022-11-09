@@ -76,6 +76,18 @@ const HeaderStyles = styled.header`
     align-items: center;
     flex-direction: row-reverse;
   }
+
+  @media screen and (max-width: 1023.98px) {
+    .logo {
+      max-width: 30px;
+    }
+    .menu,
+    .search,
+    .header-button,
+    .header-auth {
+      display: none;
+    }
+  }
 `;
 
 function geLastName(newName) {

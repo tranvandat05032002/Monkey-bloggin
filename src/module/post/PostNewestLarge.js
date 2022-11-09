@@ -17,6 +17,11 @@ const PostNewestLargeStyles = styled.div`
     &-title {
       margin-bottom: 12px;
     }
+    @media screen and (max-width: 1023.98px) {
+      &-image {
+        height: 250px;
+      }
+    }
   }
 `;
 
