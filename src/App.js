@@ -1,4 +1,5 @@
 import DashboardLayout from "module/dashboard/DashboardLayout";
+import PostAddNew from "module/post/PostAddNew";
 import PostDetailsPage from "module/post/PostDetailsPage";
 import PostManage from "module/post/PostMange";
 import DashboardPage from "pages/DashboardPage";
@@ -29,6 +30,10 @@ function App() {
             ></Route>
           </Route>
           <Route path="/post/mange" element={<PostManage></PostManage>}></Route>
+          <Route
+            path="/mange/add-post"
+            element={<PostAddNew></PostAddNew>}
+          ></Route>
         </Routes>
       </AuthProvider>
     </div>
