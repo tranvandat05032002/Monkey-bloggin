@@ -28,12 +28,15 @@ function App() {
               path="/dashboard"
               element={<DashboardPage></DashboardPage>}
             ></Route>
+            <Route
+              path="/manage/post"
+              element={<PostManage></PostManage>}
+            ></Route>
+            <Route
+              path="/mange/add-post"
+              element={<PostAddNew></PostAddNew>}
+            ></Route>
           </Route>
-          <Route path="/post/mange" element={<PostManage></PostManage>}></Route>
-          <Route
-            path="/mange/add-post"
-            element={<PostAddNew></PostAddNew>}
-          ></Route>
         </Routes>
       </AuthProvider>
     </div>

@@ -146,10 +146,7 @@ const Sidebar = () => {
       {sidebarLinks.map((link) => (
         <NavLink to={link.url} className="menu-item">
           <span className="menu-icon">{link.icon}</span>
-          <NavLink to={link.url} className="menu-item" key={link.title}>
-            <span className="menu-icon">{link.icon}</span>
-            <span className="menu-text">{link.title}</span>
-          </NavLink>
+          <span className="menu-text">{link.title}</span>
         </NavLink>
       ))}
     </SidebarStyles>
