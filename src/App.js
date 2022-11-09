@@ -1,4 +1,6 @@
+import DashboardLayout from "module/dashboard/DashboardLayout";
 import PostDetailsPage from "module/post/PostDetailsPage";
+import DashboardPage from "pages/DashboardPage";
 import HomePage from "pages/HomePage";
 import NotFoundPage from "pages/NotFoundPage";
 import SignInPage from "pages/SignInPage";
@@ -19,6 +21,12 @@ function App() {
             path="/:slug"
             element={<PostDetailsPage></PostDetailsPage>}
           ></Route>
+          <Route element={<DashboardLayout></DashboardLayout>}>
+            <Route
+              path="/dashboard"
+              element={<DashboardPage></DashboardPage>}
+            ></Route>
+          </Route>
         </Routes>
       </AuthProvider>
     </div>

@@ -37,6 +37,7 @@ const PostDetailsPageStyles = styled.div`
   }
   .author {
     margin-top: 40px;
+    margin-bottom: 80px;
     display: flex;
     border-radius: 20px;
     background-color: ${(props) => props.theme.grayF3};
@@ -58,12 +59,37 @@ const PostDetailsPageStyles = styled.div`
     }
     &-name {
       font-weight: bold;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       font-size: 20px;
     }
     &-desc {
       font-size: 14px;
       line-height: 2;
+    }
+  }
+
+  @media screen and (max-width: 1023.98px) {
+    padding-bottom: 40px;
+    .post {
+      &-header {
+        flex-direction: column;
+      }
+      &-feature {
+        height: auto;
+      }
+      &-heading {
+        font-size: 26px;
+      }
+      &-content {
+        margin: 40px 0;
+      }
+    }
+    .author {
+      flex-direction: column;
+      &-image {
+        width: 100%;
+        height: auto;
+      }
     }
   }
 `;
@@ -167,7 +193,7 @@ const PostDetailsPage = () => {
                 />
               </div>
               <div className="author-content">
-                <h3 className="author-name">Evondev</h3>
+                <h3 className="author-name">Tran Van Dat</h3>
                 <p className="author-desc">
                   Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                   Dignissimos non animi porro voluptates quibusdam optio nulla
