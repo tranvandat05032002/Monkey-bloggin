@@ -15,3 +15,9 @@ export const theme = {
   black: "#171725",
   white400: "#F8F9FA",
 };
+
+export const postStatus = {
+  APPROVED: 1,
+  PENDING: 2,
+  REJECTED: 3,
+};

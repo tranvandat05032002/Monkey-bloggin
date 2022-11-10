@@ -144,7 +144,7 @@ const Sidebar = () => {
         <span>Monkey Blogging</span>
       </div>
       {sidebarLinks.map((link) => (
-        <NavLink to={link.url} className="menu-item">
+        <NavLink key={link.url} to={link.url} className="menu-item">
           <span className="menu-icon">{link.icon}</span>
           <span className="menu-text">{link.title}</span>
         </NavLink>
