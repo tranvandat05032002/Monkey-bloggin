@@ -16,6 +16,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import ImageUpload from "component/image/ImageUpload";
 const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
@@ -109,7 +110,10 @@ const PostAddNew = () => {
         <div className="grid grid-cols-2 mb-10 gap-x-10">
           <Field>
             <Label>Image</Label>
-            <input type="file" name="image" onChange={handleSelectImage} />
+            <ImageUpload
+              name={"image"}
+              onChange={handleSelectImage}
+            ></ImageUpload>
           </Field>
           <Field>
             <Label>Status</Label>

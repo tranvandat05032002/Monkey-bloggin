@@ -1,7 +1,14 @@
 import React from "react";
 import { useController } from "react-hook-form";
 
-const Radio = ({ checked, children, control, name, ...rest }) => {
+const Radio = ({
+  checked,
+  children,
+  control,
+  name,
+  colorStyle = "approved",
+  ...rest
+}) => {
   const { field } = useController({
     control,
     name,
