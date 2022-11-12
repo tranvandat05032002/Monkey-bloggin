@@ -2,11 +2,10 @@ import { Button } from "component/button";
 import { Field } from "component/field";
 import { Input } from "component/input";
 import { Label } from "component/label";
-import { Radio, Checkbox } from "component/checkbox";
+import { Radio } from "component/checkbox";
 import { Dropdown } from "component/dropdown";
 import React from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import slugify from "slugify";
 import { postStatus } from "utils/constans";
 import { toast } from "react-toastify";
@@ -15,12 +14,12 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 import ImageUpload from "component/image/ImageUpload";
-const PostAddNewStyles = styled.div``;
 
 const PostAddNew = () => {
-  const { control, watch, setValue, handleSubmit } = useForm({
+  const { control, watch, setValue, handleSubmit, getValues } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -31,6 +30,10 @@ const PostAddNew = () => {
   });
   const watchStatus = watch("status");
   const watchCategory = watch("category");
+
+  //Progess
+  const [progress, setProgress] = React.useState(0);
+  const [image, setImage] = React.useState("");
   const addPostHandle = async (values) => {
     const cloneValues = { ...values };
     cloneValues.slug = slugify(values.slug || values.title);
@@ -52,9 +55,10 @@ const PostAddNew = () => {
       "state_changed",
       (snapshot) => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
+        const progressPercent =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
+        console.log("Upload is " + progressPercent + "% done");
+        setProgress(progressPercent);
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -75,7 +79,11 @@ const PostAddNew = () => {
       () => {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
+          console.log(
+            "🚀 ~ file: PostAddNew.js ~ line 81 ~ getDownloadURL ~ downloadURL",
+            downloadURL
+          );
+          setImage(downloadURL);
         });
       }
     );
@@ -83,10 +91,30 @@ const PostAddNew = () => {
   const handleSelectImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setValue("image", file);
+    setValue("image_name", file.name);
+    console.log(file.name);
+    handleUploadImage(file);
+  };
+  // Delete image
+  const handleDeleteImage = (file) => {
+    const storage = getStorage();
+
+    // Create a reference to the file to delete
+    const desertRef = ref(storage, "images/" + getValues("image_name"));
+
+    // Delete the file
+    deleteObject(desertRef)
+      .then(() => {
+        console.log("Remove image successfully");
+        setImage("");
+        setProgress(0);
+      })
+      .catch((error) => {
+        console.log("Can not delete image");
+      });
   };
   return (
-    <PostAddNewStyles>
+    <div>
       <h1 className="dashboard-heading">Add new post</h1>
       <form onSubmit={handleSubmit(addPostHandle)}>
         <div className="grid grid-cols-2 mb-10 gap-x-10">
@@ -113,6 +141,10 @@ const PostAddNew = () => {
             <ImageUpload
               name={"image"}
               onChange={handleSelectImage}
+              handleDeleteImage={handleDeleteImage}
+              className={"h-[250px]"}
+              progress={progress}
+              image={image}
             ></ImageUpload>
           </Field>
           <Field>
@@ -147,10 +179,6 @@ const PostAddNew = () => {
               </Radio>
             </div>
           </Field>
-          {/* <Field>
-            <Label>Author</Label>
-            <Input control={control} placeholder="Find the author"></Input>
-          </Field> */}
         </div>
         <div className="grid grid-cols-2 mb-10 gap-x-10">
           <Field>
@@ -169,7 +197,7 @@ const PostAddNew = () => {
           Add new post
         </Button>
       </form>
-    </PostAddNewStyles>
+    </div>
   );
 };
 
