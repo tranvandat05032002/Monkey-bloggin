@@ -10,6 +10,7 @@ import Layout from "./layout/Layout";
 import { LoadingSniper } from "./loading";
 import { Pagination } from "./pagination";
 import { Table } from "./table";
+import Toggle from "./toggle/Toggle";
 export {
   Button,
   Checkbox,
@@ -25,4 +26,5 @@ export {
   Pagination,
   Table,
   Input,
+  Toggle,
 };

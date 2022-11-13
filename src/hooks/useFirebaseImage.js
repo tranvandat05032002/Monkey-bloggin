@@ -16,6 +16,7 @@ export default function useFirebaseImage(setValue, getValues) {
     const cloneValues = { ...values };
     cloneValues.slug = slugify(values.slug || values.title);
     cloneValues.status = Number(values.status);
+    console.log(cloneValues);
     handleUploadImage(cloneValues.image);
   };
   const handleDeleteImage = (file) => {
@@ -42,7 +43,7 @@ export default function useFirebaseImage(setValue, getValues) {
     // Create the file metadata
 
     // Upload file and metadata to the object 'images/mountains.jpg'
-    const storageRef = ref(storage, "images/" + file.name);
+    const storageRef = ref(storage, "images/" + file?.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     // Listen for state changes, errors, and completion of the upload.

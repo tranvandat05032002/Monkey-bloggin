@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { postStatus } from "utils/constans";
 import { Dropdown } from "component/dropdown";
 import ImageUpload from "component/image/ImageUpload";
-import { Button, Field, Input, Label, Radio } from "component";
+import { Button, Field, Input, Label, Radio, Toggle } from "component";
 import useFirebaseImage from "hooks/useFirebaseImage";
 
 const PostAddNew = () => {
@@ -14,9 +14,11 @@ const PostAddNew = () => {
       slug: "",
       status: 2,
       category: "",
+      hot: false,
     },
   });
   const watchStatus = watch("status");
+  const watchHot = watch("hot");
   // const watchCategory = watch("category");
 
   const {
@@ -62,6 +64,20 @@ const PostAddNew = () => {
             ></ImageUpload>
           </Field>
           <Field>
+            <Label>Category</Label>
+          </Field>
+        </div>
+        <div className="grid grid-cols-2 mb-10 gap-x-10">
+          <Field>
+            <Label>Feature post</Label>
+            <Toggle
+              on={watchHot}
+              onClick={() => {
+                setValue("hot", !watchHot);
+              }}
+            ></Toggle>
+          </Field>
+          <Field>
             <Label>Status</Label>
             <div className="flex items-center gap-x-5">
               <Radio
@@ -94,20 +110,7 @@ const PostAddNew = () => {
             </div>
           </Field>
         </div>
-        <div className="grid grid-cols-2 mb-10 gap-x-10">
-          <Field>
-            <Label>Category</Label>
-            <Dropdown>
-              <Dropdown.Option>Knowledge</Dropdown.Option>
-              <Dropdown.Option>Blockchain</Dropdown.Option>
-              <Dropdown.Option>Setup</Dropdown.Option>
-              <Dropdown.Option>Nature</Dropdown.Option>
-              <Dropdown.Option>Developer</Dropdown.Option>
-            </Dropdown>
-          </Field>
-          <Field></Field>
-        </div>
-        <Button type="submit" className="mx-auto">
+        <Button type="submit" className="mx-auto max-w-[200px]">
           Add new post
         </Button>
       </form>
