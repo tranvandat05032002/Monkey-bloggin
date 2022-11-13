@@ -1,10 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { postStatus } from "utils/constans";
-import { Dropdown } from "component/dropdown";
+// import { Dropdown } from "component/dropdown";
 import ImageUpload from "component/image/ImageUpload";
 import { Button, Field, Input, Label, Radio, Toggle } from "component";
 import useFirebaseImage from "hooks/useFirebaseImage";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "firebase-app/firebase-config";
 
 const PostAddNew = () => {
   const { control, watch, setValue, handleSubmit, getValues } = useForm({
@@ -28,6 +30,23 @@ const PostAddNew = () => {
     progress,
     handleDeleteImage,
   } = useFirebaseImage(setValue, getValues);
+
+  React.useEffect(() => {
+    async function getData() {
+      const colRef = collection(db, "categories");
+      const q = query(colRef, where("status", "==", 1));
+      const querySnapshot = await getDocs(q);
+      const result = [];
+      querySnapshot.forEach((doc) => {
+        result.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      console.log(result);
+    }
+    getData();
+  }, []);
 
   return (
     <div>
