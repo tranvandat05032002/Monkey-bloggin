@@ -7,6 +7,7 @@ import { Button, Field, Input, Label, Radio, Toggle } from "component";
 import useFirebaseImage from "hooks/useFirebaseImage";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
+import { Dropdown } from "component/dropdown";
 
 const PostAddNew = () => {
   const { control, watch, setValue, handleSubmit, getValues } = useForm({
@@ -15,13 +16,14 @@ const PostAddNew = () => {
       title: "",
       slug: "",
       status: 2,
-      category: "",
+      categoryID: "",
       hot: false,
     },
   });
   const watchStatus = watch("status");
   const watchHot = watch("hot");
   // const watchCategory = watch("category");
+  const [category, setCategory] = React.useState([]);
 
   const {
     addPostHandle,
@@ -43,10 +45,13 @@ const PostAddNew = () => {
           ...doc.data(),
         });
       });
-      console.log(result);
+      setCategory(result);
     }
     getData();
   }, []);
+  const handleClickOption = (item) => {
+    setValue("categoryID", item.id);
+  };
 
   return (
     <div>
@@ -84,6 +89,20 @@ const PostAddNew = () => {
           </Field>
           <Field>
             <Label>Category</Label>
+            <Dropdown>
+              <Dropdown.Select placeholder="Please select an option"></Dropdown.Select>
+              <Dropdown.List>
+                {category.length > 0 &&
+                  category.map((item) => (
+                    <Dropdown.Option
+                      onClick={() => handleClickOption(item)}
+                      key={item.id}
+                    >
+                      {item.name}
+                    </Dropdown.Option>
+                  ))}
+              </Dropdown.List>
+            </Dropdown>
           </Field>
         </div>
         <div className="grid grid-cols-2 mb-10 gap-x-10">

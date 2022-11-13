@@ -19,10 +19,6 @@ const ImageUpload = (props) => {
     handleDeleteImage = () => {},
     ...rest
   } = props;
-  console.log(
-    "🚀 ~ file: ImageUpload.js ~ line 19 ~ ImageUpload ~ image",
-    image
-  );
   return (
     <label
       className={`cursor-pointer flex items-center justify-center bg-gray-100 border border-dashed w-full min-h-[200px] rounded-lg ${className} relative overflow-hidden group`}
