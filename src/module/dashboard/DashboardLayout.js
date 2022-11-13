@@ -1,3 +1,5 @@
+import { useAuth } from "context/auth-context";
+import NotFoundPage from "pages/NotFoundPage";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
@@ -23,7 +25,17 @@ const DashboardStyles = styled.div`
     }
   }
 `;
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = () => {
+  const { userInfo } = useAuth();
+  console.log(
+    "🚀 ~ file: DashboardLayout.js ~ line 30 ~ DashboardLayout ~ userInfo",
+    userInfo
+  );
+  if (!userInfo.uid) return <NotFoundPage></NotFoundPage>;
+  console.log(
+    "🚀 ~ file: DashboardLayout.js ~ line 35 ~ DashboardLayout ~ userInfo",
+    userInfo
+  );
   return (
     <DashboardStyles>
       <DashboardHeader></DashboardHeader>

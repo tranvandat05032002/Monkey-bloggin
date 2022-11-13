@@ -5,12 +5,15 @@ import { postStatus } from "utils/constans";
 import ImageUpload from "component/image/ImageUpload";
 import { Button, Field, Input, Label, Radio, Toggle } from "component";
 import useFirebaseImage from "hooks/useFirebaseImage";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
 import { Dropdown } from "component/dropdown";
+import slugify from "slugify";
+import { useAuth } from "context/auth-context";
+import { toast } from "react-toastify";
 
 const PostAddNew = () => {
-  const { control, watch, setValue, handleSubmit, getValues } = useForm({
+  const { control, watch, setValue, handleSubmit, getValues, reset } = useForm({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -18,20 +21,18 @@ const PostAddNew = () => {
       status: 2,
       categoryID: "",
       hot: false,
+      image: "",
     },
   });
   const watchStatus = watch("status");
   const watchHot = watch("hot");
+
   // const watchCategory = watch("category");
   const [category, setCategory] = React.useState([]);
+  const [selectCategory, setSelectCategory] = React.useState("");
 
-  const {
-    addPostHandle,
-    handleSelectImage,
-    image,
-    progress,
-    handleDeleteImage,
-  } = useFirebaseImage(setValue, getValues);
+  const { handleSelectImage, image, progress, handleDeleteImage } =
+    useFirebaseImage(setValue, getValues);
 
   React.useEffect(() => {
     async function getData() {
@@ -51,6 +52,34 @@ const PostAddNew = () => {
   }, []);
   const handleClickOption = (item) => {
     setValue("categoryID", item.id);
+    setSelectCategory(item);
+  };
+  const { userInfo } = useAuth();
+  React.useEffect(() => {
+    document.title = "Add-post";
+  }, []);
+  const addPostHandle = async (values) => {
+    const cloneValues = { ...values };
+    cloneValues.slug = slugify(values.slug || values.title, {
+      lower: true,
+    });
+    cloneValues.status = Number(values.status);
+    const colRef = collection(db, "posts");
+    await addDoc(colRef, {
+      ...cloneValues,
+      image,
+      userID: userInfo.uid,
+    });
+    toast.success("Create new post successfully!");
+    reset({
+      title: "",
+      slug: "",
+      status: 2,
+      categoryID: "",
+      hot: false,
+      image: "",
+    });
+    setSelectCategory({});
   };
 
   return (
@@ -90,7 +119,9 @@ const PostAddNew = () => {
           <Field>
             <Label>Category</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Please select an option"></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={`Please select an option` || selectCategory.name}
+              ></Dropdown.Select>
               <Dropdown.List>
                 {category.length > 0 &&
                   category.map((item) => (
@@ -103,6 +134,11 @@ const PostAddNew = () => {
                   ))}
               </Dropdown.List>
             </Dropdown>
+            {selectCategory?.name && (
+              <span className="inline-block p-3 text-sm font-medium text-green-600 rounded-lg cursor-pointer bg-green-50">
+                {selectCategory.name}
+              </span>
+            )}
           </Field>
         </div>
         <div className="grid grid-cols-2 mb-10 gap-x-10">

@@ -12,13 +12,6 @@ export default function useFirebaseImage(setValue, getValues) {
   const [progress, setProgress] = React.useState(0);
   const [image, setImage] = React.useState("");
   if (!setValue || !getValues) return;
-  const addPostHandle = async (values) => {
-    const cloneValues = { ...values };
-    cloneValues.slug = slugify(values.slug || values.title);
-    cloneValues.status = Number(values.status);
-    console.log(cloneValues);
-    handleUploadImage(cloneValues.image);
-  };
   const handleDeleteImage = (file) => {
     const storage = getStorage();
 
@@ -88,7 +81,6 @@ export default function useFirebaseImage(setValue, getValues) {
   return {
     progress,
     image,
-    addPostHandle,
     handleSelectImage,
     handleDeleteImage,
   };

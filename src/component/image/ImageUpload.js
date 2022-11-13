@@ -1,14 +1,5 @@
-import React from "react";
-import styled from "styled-components";
-const CloseButtonStyles = styled.button`
-  position: absolute;
-  top: 1%;
-  right: 1%;
-  color: white;
-  border-radius: 100%;
-  background-color: rgba(194, 190, 190, 0.7);
-  z-index: 100;
-`;
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 
 const ImageUpload = (props) => {
   const {
@@ -21,18 +12,18 @@ const ImageUpload = (props) => {
   } = props;
   return (
     <label
-      className={`cursor-pointer flex items-center justify-center bg-gray-100 border border-dashed w-full min-h-[200px] rounded-lg ${className} relative overflow-hidden group`}
+      className={`cursor-pointer flex items-center justify-center border border-dashed w-full min-h-[200px] rounded-lg ${className} relative overflow-hidden group`}
     >
-      {progress !== 0 && !image && (
-        <div className="w-12 h-12 border-green-500 border-[6px] loading absolute rounded-full border-t-transparent animate-spin transition-all"></div>
-      )}
       <input
         type="file"
         name={name}
-        className=" hidden-input"
+        className="hidden-input"
         onChange={() => {}}
         {...rest}
       />
+      {progress !== 0 && !image && (
+        <div className="absolute z-10 w-16 h-16 border-8 border-green-500 rounded-full loading border-t-transparent animate-spin"></div>
+      )}
       {!image && progress === 0 && (
         <div className="flex flex-col items-center text-center pointer-events-none">
           <img
@@ -44,34 +35,33 @@ const ImageUpload = (props) => {
         </div>
       )}
       {image && (
-        <div className="relative w-full h-full">
+        <Fragment>
           <img src={image} className="object-cover w-full h-full" alt="" />
-          <CloseButtonStyles
-            onClick={handleDeleteImage}
+          <button
             type="button"
-            className="opacity-0 group-hover:opacity-100 group-hover:visible"
+            className="absolute z-10 flex items-center justify-center invisible w-16 h-16 text-red-500 transition-all bg-white rounded-full opacity-0 cursor-pointer group-hover:opacity-100 group-hover:visible"
+            onClick={handleDeleteImage}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth="1.5"
               stroke="currentColor"
-              className="w-6 h-6"
+              strokeWidth="2"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
-          </CloseButtonStyles>
-        </div>
+          </button>
+        </Fragment>
       )}
-
       {!image && (
         <div
-          className="absolute bottom-0 left-0 w-[0px] h-1 transition-all bg-green-400 image-upload-progress"
+          className="absolute bottom-0 left-0 w-10 h-1 transition-all bg-green-400 image-upload-progress"
           style={{
             width: `${Math.ceil(progress)}%`,
           }}
@@ -80,5 +70,10 @@ const ImageUpload = (props) => {
     </label>
   );
 };
-
+ImageUpload.propTypes = {
+  name: PropTypes.string,
+  className: PropTypes.string,
+  progress: PropTypes.number,
+  image: PropTypes.string,
+};
 export default ImageUpload;
