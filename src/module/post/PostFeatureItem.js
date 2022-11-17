@@ -1,4 +1,8 @@
+import { async } from "@firebase/util";
+import { db } from "firebase-app/firebase-config";
+import { doc, getDoc } from "firebase/firestore";
 import React from "react";
+import slugify from "slugify";
 import styled from "styled-components";
 import PostCategory from "./PostCategory";
 import PostImage from "./PostImage";
@@ -52,21 +56,49 @@ const PostFeatureItemStyles = styled.div`
     }
   }
 `;
-const PostFeatureItem = () => {
+const PostFeatureItem = ({ data }) => {
+  const [category, setCategory] = React.useState("");
+  const [user, setUser] = React.useState("");
+  console.log(data);
+
+  React.useEffect(() => {
+    async function fetchCategory() {
+      const docRef = doc(db, "categories", data.categoryID);
+      const docSnap = await getDoc(docRef);
+      setCategory(docSnap?.data());
+    }
+    fetchCategory();
+  }, [data.categoryID]);
+  React.useEffect(() => {
+    async function fetchUser() {
+      if (data.userID) {
+        const docRef = doc(db, "users", data.userID);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.data) {
+          setUser(docSnap.data());
+        }
+      }
+    }
+    fetchUser();
+  }, [data.userID]);
+  if (!data || !data.id) return null;
   return (
     <PostFeatureItemStyles>
-      <PostImage
-        url="https://images.unsplash.com/photo-1614624532983-4ce03382d63d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2662&q=80"
-        alt="unsplash"
-      />
+      <PostImage url={data.image} alt="unsplash" />
       <div className="post-overlay"></div>
       <div className="post-content">
         <div className="post-top">
-          <PostCategory type="secondary">Kiến thức</PostCategory>
-          <PostMeta className="meta-setColor"></PostMeta>
+          <PostCategory to={category?.slug} type="secondary">
+            {category.name}
+          </PostCategory>
+          <PostMeta
+            className="meta-setColor"
+            authorName={user?.fullName}
+            to={slugify(user?.fullName || "", { lower: true })}
+          ></PostMeta>
         </div>
-        <PostTitle size="big">
-          Hướng dẫn setup phòng cực chill dành cho người mới toàn tập
+        <PostTitle to={data?.slug} size="big">
+          {data.title}
         </PostTitle>
       </div>
     </PostFeatureItemStyles>

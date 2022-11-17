@@ -5,7 +5,14 @@ import { postStatus } from "utils/constans";
 import ImageUpload from "component/image/ImageUpload";
 import { Button, Field, Input, Label, Radio, Toggle } from "component";
 import useFirebaseImage from "hooks/useFirebaseImage";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
 import { Dropdown } from "component/dropdown";
 import slugify from "slugify";
@@ -30,9 +37,15 @@ const PostAddNew = () => {
   // const watchCategory = watch("category");
   const [category, setCategory] = React.useState([]);
   const [selectCategory, setSelectCategory] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
-  const { handleSelectImage, image, progress, handleDeleteImage } =
-    useFirebaseImage(setValue, getValues);
+  const {
+    handleSelectImage,
+    image,
+    progress,
+    handleResetUpload,
+    handleDeleteImage,
+  } = useFirebaseImage(setValue, getValues);
 
   React.useEffect(() => {
     async function getData() {
@@ -59,27 +72,35 @@ const PostAddNew = () => {
     document.title = "Add-post";
   }, []);
   const addPostHandle = async (values) => {
-    const cloneValues = { ...values };
-    cloneValues.slug = slugify(values.slug || values.title, {
-      lower: true,
-    });
-    cloneValues.status = Number(values.status);
-    const colRef = collection(db, "posts");
-    await addDoc(colRef, {
-      ...cloneValues,
-      image,
-      userID: userInfo.uid,
-    });
-    toast.success("Create new post successfully!");
-    reset({
-      title: "",
-      slug: "",
-      status: 2,
-      categoryID: "",
-      hot: false,
-      image: "",
-    });
-    setSelectCategory({});
+    setLoading(true);
+    try {
+      const cloneValues = { ...values };
+      cloneValues.slug = slugify(values.slug || values.title, {
+        lower: true,
+      });
+      cloneValues.status = Number(values.status);
+      const colRef = collection(db, "posts");
+      await addDoc(colRef, {
+        ...cloneValues,
+        image,
+        userID: userInfo.uid,
+        createAt: serverTimestamp(),
+      });
+      toast.success("Create new post successfully!");
+      reset({
+        title: "",
+        slug: "",
+        status: 2,
+        categoryID: "",
+        hot: false,
+        image: "",
+      });
+      setLoading(false);
+      handleResetUpload();
+      setSelectCategory({});
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -184,7 +205,12 @@ const PostAddNew = () => {
             </div>
           </Field>
         </div>
-        <Button type="submit" className="mx-auto max-w-[200px]">
+        <Button
+          isLoading={loading}
+          disabled={loading}
+          type="submit"
+          className="mx-auto max-w-[200px]"
+        >
           Add new post
         </Button>
       </form>

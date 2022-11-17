@@ -32,7 +32,7 @@ const PostTitleStyles = styled.h3`
 const PostTitle = ({ children, size = "normal", className = "", to = "/" }) => {
   return (
     <PostTitleStyles size={size} className={`post-title ${className}`}>
-      <NavLink>{children}</NavLink>
+      <NavLink to={to}>{children}</NavLink>
     </PostTitleStyles>
   );
 };

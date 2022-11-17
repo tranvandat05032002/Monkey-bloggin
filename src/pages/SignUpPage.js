@@ -10,9 +10,10 @@ import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "firebase-app/firebase-config";
 import { NavLink, useNavigate } from "react-router-dom";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import PropTypes from "prop-types";
 import AuthenticationPage from "./AuthenticationPage";
+import slugify from "slugify";
 
 const SignUpPage = () => {
   //Yup validation
@@ -59,11 +60,12 @@ const SignUpPage = () => {
         displayName: values.fullName,
       });
       navigate("/sign-in");
-      const colRef = collection(db, "users");
-      await addDoc(colRef, {
+      //Note: was wrong here
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
         fullName: values.fullName,
         email: values.emailAddress,
         password: values.password,
+        userName: slugify(values.fullName, { lower: true }),
       });
     } catch (error) {
       console.log(error);
