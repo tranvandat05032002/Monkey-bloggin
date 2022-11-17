@@ -82,6 +82,11 @@ const PostFeatureItem = ({ data }) => {
     fetchUser();
   }, [data.userID]);
   if (!data || !data.id) return null;
+  const date = data?.createAt?.seconds
+    ? new Date(data?.createAt?.seconds * 1000)
+    : new Date();
+  const formatDate = new Date(date).toLocaleDateString("vi-VN");
+  console.log(date);
   return (
     <PostFeatureItemStyles>
       <PostImage url={data.image} alt="unsplash" />
@@ -92,6 +97,7 @@ const PostFeatureItem = ({ data }) => {
             {category.name}
           </PostCategory>
           <PostMeta
+            date={formatDate}
             className="meta-setColor"
             authorName={user?.fullName}
             to={slugify(user?.fullName || "", { lower: true })}
