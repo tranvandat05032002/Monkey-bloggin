@@ -1,5 +1,5 @@
 import { useAuth } from "context/auth-context";
-import NotFoundPage from "pages/NotFoundPage";
+import PageNotFound from "pages/PageNotFound";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
@@ -16,6 +16,18 @@ const DashboardStyles = styled.div`
       gap: 0 40px;
       align-items: start;
     }
+    @media screen and (max-width: 1023.98px) {
+      &-heading {
+        font-size: 20px;
+      }
+      &-short-desc {
+        margin-bottom: 25px;
+      }
+      &-main {
+        grid-template-columns: 100%;
+        padding: 20px;
+      }
+    }
     &-heading {
       font-weight: bold;
       font-size: 36px;
@@ -31,7 +43,7 @@ const DashboardLayout = () => {
     "🚀 ~ file: DashboardLayout.js ~ line 30 ~ DashboardLayout ~ userInfo",
     userInfo
   );
-  if (!userInfo.uid) return <NotFoundPage></NotFoundPage>;
+  if (!userInfo.uid) return <PageNotFound></PageNotFound>;
   console.log(
     "🚀 ~ file: DashboardLayout.js ~ line 35 ~ DashboardLayout ~ userInfo",
     userInfo

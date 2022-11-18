@@ -5,11 +5,12 @@ const FieldStyles = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  row-gap: 20px;
+  /* row-gap: 20px;
   margin-bottom: 40px;
   &:last-child {
     margin-bottom: 0px;
-  }
+  } */
+  row-gap: 10px;
 `;
 
 const Field = ({ children }) => {

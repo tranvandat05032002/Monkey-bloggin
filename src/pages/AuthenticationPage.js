@@ -23,7 +23,8 @@ const AuthenticationPageStyles = styled.div`
   .have-account {
     margin-bottom: 20px;
     font-size: 12px;
-    margin-top: -14px;
+    /* margin-top: -14px; */
+    margin-top: 8px;
     text-align: start;
     a {
       display: inline-block;

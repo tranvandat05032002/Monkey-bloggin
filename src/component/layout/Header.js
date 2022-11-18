@@ -70,11 +70,9 @@ const HeaderStyles = styled.header`
     right: 15px;
   }
   .header-auth {
-    gap: 20px;
-    margin-left: 20px;
     display: flex;
     align-items: center;
-    flex-direction: row-reverse;
+    gap: 20px;
   }
 
   @media screen and (max-width: 1023.98px) {
@@ -180,16 +178,14 @@ const Header = () => {
           ) : (
             <>
               <div className="header-auth">
-                <strong>{geLastName(userInfo?.displayName)}</strong>
-                <Button
-                  type="button"
-                  className="header-button max-w-[115px] ml-5"
-                  height="46px"
-                  to="/sign-in"
-                  onClick={handleLogOut}
-                >
-                  Log out
-                </Button>
+              <Button
+                type="button"
+                height="56px"
+                className="header-button"
+                to="/dashboard"
+              >
+                Dashboard
+              </Button>
               </div>
             </>
           )}

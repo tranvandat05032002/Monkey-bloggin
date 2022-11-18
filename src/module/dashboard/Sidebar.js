@@ -32,6 +32,9 @@ const SidebarStyles = styled.div`
       color: ${(props) => props.theme.primary};
     }
   }
+  @media screen and (max-width: 1023.98px) {
+    display: none;
+  }
 `;
 const sidebarLinks = [
   {
