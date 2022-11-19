@@ -1,8 +1,16 @@
-import { Button, Table } from "component";
+import { Button, Input, Table } from "component";
 import { ActionDelete, ActionEdit, ActionView } from "component/action";
 import { LabelStatus } from "component/label";
 import { db } from "firebase-app/firebase-config";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { debounce } from "lodash";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,10 +19,21 @@ import { categoryStatus } from "utils/constans";
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = React.useState([]);
+  const [filter, setFilter] = React.useState("");
+  const handleFilterValues = debounce((e) => {
+    setFilter(e.target.value);
+  }, 500);
   const navigate = useNavigate();
   React.useEffect(() => {
     const colRef = collection(db, "categories");
-    onSnapshot(colRef, (snapShot) => {
+    const newRef = filter
+      ? query(
+          colRef,
+          where("name", ">=", filter),
+          where("name", "<=", filter + "utf8")
+        )
+      : colRef;
+    onSnapshot(newRef, (snapShot) => {
       let cities = [];
       snapShot.forEach((doc) => {
         cities.push({
@@ -24,7 +43,7 @@ const CategoryManage = () => {
       });
       setCategoryList(cities);
     });
-  }, []);
+  }, [filter]);
 
   console.log(categoryList);
   const handleDeleteCategory = async (docID) => {
@@ -50,6 +69,14 @@ const CategoryManage = () => {
           Create category
         </Button>
       </DashboardHeading>
+      <div className="flex justify-end mb-10">
+        <input
+          type="text"
+          placeholder="Search category"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-sm outline-none focus-within:border-green-300"
+          onChange={handleFilterValues}
+        />
+      </div>
       <Table>
         <thead>
           <tr>
