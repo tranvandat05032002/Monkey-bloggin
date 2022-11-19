@@ -93,9 +93,11 @@ const PostFeatureItem = ({ data }) => {
       <div className="post-overlay"></div>
       <div className="post-content">
         <div className="post-top">
-          <PostCategory to={category?.slug} type="secondary">
-            {category.name}
-          </PostCategory>
+          {category?.name && (
+            <PostCategory to={category?.slug} type="secondary">
+              {category.name}
+            </PostCategory>
+          )}
           <PostMeta
             date={formatDate}
             className="meta-setColor"
