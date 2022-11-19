@@ -10,6 +10,7 @@ const FieldStyles = styled.div`
   &:last-child {
     margin-bottom: 0px;
   } */
+  margin-bottom: 25px;
   row-gap: 10px;
 `;
 

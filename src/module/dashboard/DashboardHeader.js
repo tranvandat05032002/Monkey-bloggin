@@ -39,7 +39,7 @@ const DashboardHeaderStyles = styled.div`
 const DashboardHeader = () => {
   return (
     <DashboardHeaderStyles>
-      <NavLink to="/" className="logo">
+      <NavLink to="/profile" className="logo">
         <img srcSet="/logo.png 2x" alt="monkey-blogging" className="logo" />
         <span className="hidden lg:inline-block">Monkey Blogging</span>
       </NavLink>

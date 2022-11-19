@@ -3,12 +3,15 @@ import { Button } from "component";
 import { Pagination } from "component/pagination";
 import { Table } from "component/table";
 import React from "react";
+import DashboardHeading from "module/dashboard/DashboardHeading";
 
 const PostManage = () => {
   return (
     <div>
-      <h1 className="dashboard-heading">Manage post</h1>
-      <p className="dashboard-short-desc">Manage all posts</p>
+      <DashboardHeading
+        title="All posts"
+        desc="Manage all posts"
+      ></DashboardHeading>
       <div className="flex justify-end gap-5 mb-10">
         <div className="w-full max-w-[200px]">
           <Dropdown>

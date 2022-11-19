@@ -1,9 +1,16 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { postStatus } from "utils/constans";
-// import { Dropdown } from "component/dropdown";
 import ImageUpload from "component/image/ImageUpload";
-import { Button, Field, Input, Label, Radio, Toggle } from "component";
+import {
+  Button,
+  Field,
+  Input,
+  Label,
+  Radio,
+  Toggle,
+  FieldCheckboxes,
+} from "component";
 import useFirebaseImage from "hooks/useFirebaseImage";
 import {
   addDoc,
@@ -18,6 +25,7 @@ import { Dropdown } from "component/dropdown";
 import slugify from "slugify";
 import { useAuth } from "context/auth-context";
 import { toast } from "react-toastify";
+import DashboardHeading from "module/dashboard/DashboardHeading";
 
 const PostAddNew = () => {
   const { control, watch, setValue, handleSubmit, getValues, reset } = useForm({
@@ -105,7 +113,7 @@ const PostAddNew = () => {
 
   return (
     <div>
-      <h1 className="dashboard-heading">Add new post</h1>
+      <DashboardHeading title="Add post" desc="Add new post"></DashboardHeading>
       <form onSubmit={handleSubmit(addPostHandle)}>
         <div className="form-layout">
           <Field>
@@ -174,7 +182,7 @@ const PostAddNew = () => {
           </Field>
           <Field>
             <Label>Status</Label>
-            <div className="flex flex-wrap items-center gap-5">
+            <FieldCheckboxes>
               <Radio
                 name="status"
                 control={control}
@@ -202,7 +210,7 @@ const PostAddNew = () => {
               >
                 Reject
               </Radio>
-            </div>
+            </FieldCheckboxes>
           </Field>
         </div>
         <Button

@@ -1,6 +1,6 @@
 import { Button } from "./button";
 import { Checkbox, Radio } from "./checkbox";
-import { Field } from "./field";
+import { Field, FieldCheckboxes } from "./field";
 import ImageUpload from "./image/ImageUpload";
 import { InputPasswordToggle, Input } from "./input";
 import { Label } from "./label";
@@ -27,4 +27,5 @@ export {
   Table,
   Input,
   Toggle,
+  FieldCheckboxes,
 };

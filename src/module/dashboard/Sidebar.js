@@ -6,17 +6,6 @@ const SidebarStyles = styled.div`
   background: #ffffff;
   box-shadow: 10px 10px 20px rgba(218, 213, 213, 0.15);
   border-radius: 12px;
-  .sidebar-logo {
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-    gap: 0 20px;
-    img {
-      max-width: 40px;
-    }
-    margin-bottom: 20px;
-    padding: 20px 20px 0;
-  }
   .menu-item {
     display: flex;
     align-items: center;
@@ -142,10 +131,6 @@ const sidebarLinks = [
 const Sidebar = () => {
   return (
     <SidebarStyles className="sidebar">
-      <div className="sidebar-logo">
-        <img srcSet="/logo.png 2x" alt="" />
-        <span>Monkey Blogging</span>
-      </div>
       {sidebarLinks.map((link) => (
         <NavLink key={link.url} to={link.url} className="menu-item">
           <span className="menu-icon">{link.icon}</span>
