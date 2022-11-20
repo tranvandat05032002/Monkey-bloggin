@@ -18,7 +18,7 @@ import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { categoryStatus, CATEGORY_PER_PAGE } from "utils/constans";
+import { categoryStatus, CATEGORY_PER_PAGE, userStatus } from "utils/constans";
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = React.useState([]);
@@ -84,8 +84,6 @@ const CategoryManage = () => {
     };
     fetchData();
   }, [filter]);
-
-  console.log(categoryList.length);
   const handleDeleteCategory = async (docID) => {
     Swal.fire({
       title: "Are you sure?",

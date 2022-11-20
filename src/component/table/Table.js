@@ -9,6 +9,7 @@ const TableStyles = styled.div`
   }
   thead {
     background-color: #f7f7f8;
+    color: ${(prop) => prop.theme.primary};
   }
   th,
   td {
