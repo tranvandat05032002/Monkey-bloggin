@@ -1,4 +1,4 @@
-import { Button, Input, Table } from "component";
+import { Button, Table } from "component";
 import { ActionDelete, ActionEdit, ActionView } from "component/action";
 import { LabelStatus } from "component/label";
 import { db } from "firebase-app/firebase-config";

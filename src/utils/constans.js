@@ -25,5 +25,18 @@ export const categoryStatus = {
   APPROVED: 1,
   UNAPPROVED: 2,
 };
-
+//category
 export const CATEGORY_PER_PAGE = 1;
+
+//user
+export const userStatus = {
+  ACTIVE: 1,
+  PENDING: 2,
+  BAN: 3,
+};
+
+export const userRole = {
+  ADMIN: 1,
+  MOD: 2,
+  USER: 3,
+};
