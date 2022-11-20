@@ -25,3 +25,5 @@ export const categoryStatus = {
   APPROVED: 1,
   UNAPPROVED: 2,
 };
+
+export const CATEGORY_PER_PAGE = 1;

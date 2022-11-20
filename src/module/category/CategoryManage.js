@@ -18,12 +18,13 @@ import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { categoryStatus } from "utils/constans";
+import { categoryStatus, CATEGORY_PER_PAGE } from "utils/constans";
 
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = React.useState([]);
   const [filter, setFilter] = React.useState("");
   const [lastDoc, setLastDoc] = React.useState();
+  const [total, setTotal] = React.useState(0);
   const handleFilterValues = debounce((e) => {
     setFilter(e.target.value);
   }, 500);
@@ -33,7 +34,7 @@ const CategoryManage = () => {
     const nextRef = query(
       collection(db, "categories"),
       startAfter(lastDoc || 0),
-      limit(1)
+      limit(CATEGORY_PER_PAGE)
     );
 
     onSnapshot(nextRef, (snapShot) => {
@@ -62,10 +63,13 @@ const CategoryManage = () => {
             where("name", ">=", filter),
             where("name", "<=", filter + "utf8")
           )
-        : query(colRef, limit(1));
+        : query(colRef, limit(CATEGORY_PER_PAGE));
       const documentSnapshots = await getDocs(newRef);
       const lastVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      onSnapshot(colRef, (snapShotSize) => {
+        setTotal(snapShotSize.size);
+      });
       onSnapshot(newRef, (snapShot) => {
         let cities = [];
         snapShot.forEach((doc) => {
@@ -159,15 +163,17 @@ const CategoryManage = () => {
             ))}
         </tbody>
       </Table>
-      <div className="mt-10">
-        <Button
-          kind="ghost"
-          className="mx-auto"
-          onClick={handleLoadMoreCategory}
-        >
-          See more+
-        </Button>
-      </div>
+      {total > categoryList.length && (
+        <div className="mt-10">
+          <Button
+            kind="ghost"
+            className="mx-auto"
+            onClick={handleLoadMoreCategory}
+          >
+            See more+
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

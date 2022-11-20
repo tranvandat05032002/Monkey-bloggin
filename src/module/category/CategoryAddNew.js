@@ -4,6 +4,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import slugify from "slugify";
 import { categoryStatus } from "utils/constans";
@@ -24,6 +25,7 @@ const CategoryAddNew = () => {
       createdAt: new Date(),
     },
   });
+  const navigate = useNavigate();
   const handleAddCategory = async (values) => {
     if (!isValid) return;
     try {
@@ -37,7 +39,10 @@ const CategoryAddNew = () => {
         ...newValues,
         createdAt: serverTimestamp(),
       });
-      toast.success("create categories successfully!");
+      toast.success("Create categories successfully!");
+      setTimeout(() => {
+        navigate("/manage/category");
+      }, 2000);
     } catch (error) {
       toast.error(error.message);
     } finally {
