@@ -6,8 +6,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
+  limit,
   onSnapshot,
   query,
+  startAfter,
   where,
 } from "firebase/firestore";
 import { debounce } from "lodash";
@@ -20,20 +23,20 @@ import { categoryStatus } from "utils/constans";
 const CategoryManage = () => {
   const [categoryList, setCategoryList] = React.useState([]);
   const [filter, setFilter] = React.useState("");
+  const [lastDoc, setLastDoc] = React.useState();
   const handleFilterValues = debounce((e) => {
     setFilter(e.target.value);
   }, 500);
   const navigate = useNavigate();
-  React.useEffect(() => {
-    const colRef = collection(db, "categories");
-    const newRef = filter
-      ? query(
-          colRef,
-          where("name", ">=", filter),
-          where("name", "<=", filter + "utf8")
-        )
-      : colRef;
-    onSnapshot(newRef, (snapShot) => {
+  //Load more data
+  const handleLoadMoreCategory = async () => {
+    const nextRef = query(
+      collection(db, "categories"),
+      startAfter(lastDoc || 0),
+      limit(1)
+    );
+
+    onSnapshot(nextRef, (snapShot) => {
       let cities = [];
       snapShot.forEach((doc) => {
         cities.push({
@@ -41,11 +44,44 @@ const CategoryManage = () => {
           ...doc?.data(),
         });
       });
-      setCategoryList(cities);
+      setCategoryList([...categoryList, ...cities]);
     });
+    const documentSnapshots = await getDocs(nextRef);
+    const lastVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    setLastDoc(lastVisible);
+  };
+
+  //Search data
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const colRef = collection(db, "categories");
+      const newRef = filter
+        ? query(
+            colRef,
+            where("name", ">=", filter),
+            where("name", "<=", filter + "utf8")
+          )
+        : query(colRef, limit(1));
+      const documentSnapshots = await getDocs(newRef);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      onSnapshot(newRef, (snapShot) => {
+        let cities = [];
+        snapShot.forEach((doc) => {
+          cities.push({
+            id: doc.id,
+            ...doc?.data(),
+          });
+        });
+        setCategoryList(cities);
+      });
+      setLastDoc(lastVisible);
+    };
+    fetchData();
   }, [filter]);
 
-  console.log(categoryList);
+  console.log(categoryList.length);
   const handleDeleteCategory = async (docID) => {
     Swal.fire({
       title: "Are you sure?",
@@ -123,6 +159,15 @@ const CategoryManage = () => {
             ))}
         </tbody>
       </Table>
+      <div className="mt-10">
+        <Button
+          kind="ghost"
+          className="mx-auto"
+          onClick={handleLoadMoreCategory}
+        >
+          See more+
+        </Button>
+      </div>
     </div>
   );
 };
