@@ -1,7 +1,8 @@
-import { Button } from "component/button";
-import Field from "component/field/Field";
-import { Input, InputPasswordToggle } from "component/input";
-import { Label } from "component/label";
+// import { Button } from "component/button";
+// import Field from "component/field/Field";
+// import { Input, InputPasswordToggle } from "component/input";
+// import { Label } from "component/label";
+import { Button, Field, Input, InputPasswordToggle, Label } from "component";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,10 +11,11 @@ import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "firebase-app/firebase-config";
 import { NavLink, useNavigate } from "react-router-dom";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import PropTypes from "prop-types";
 import AuthenticationPage from "./AuthenticationPage";
 import slugify from "slugify";
+import { userRole, userStatus } from "utils/constans";
 
 const SignUpPage = () => {
   //Yup validation
@@ -58,11 +60,18 @@ const SignUpPage = () => {
       toast.success("Register successFully");
       await updateProfile(auth.currentUser, {
         displayName: values.fullName,
+        photoURL:
+          "https://www.elle.vn/wp-content/uploads/2017/07/25/hinh-anh-dep-2.jpg",
       });
       navigate("/sign-in");
       //Note: was wrong here
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         fullName: values.fullName,
+        avatar:
+          "https://www.elle.vn/wp-content/uploads/2017/07/25/hinh-anh-dep-2.jpg",
+        createAt: serverTimestamp(),
+        status: userStatus.ACTIVE,
+        role: userRole.USER,
         email: values.emailAddress,
         password: values.password,
         userName: slugify(values.fullName, { lower: true }),
