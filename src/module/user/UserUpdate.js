@@ -1,96 +1,65 @@
+import React from "react";
 import {
   Button,
+  Radio,
+  Input,
+  Label,
   Field,
   FieldCheckboxes,
   ImageUpload,
-  Input,
-  Label,
-  Radio,
 } from "component";
-import { db } from "firebase-app/firebase-config";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import useFirebaseImage from "hooks/useFirebaseImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
-import React from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import slugify from "slugify";
+import { useSearchParams } from "react-router-dom";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { db } from "firebase-app/firebase-config";
+import useFirebaseImage from "hooks/useFirebaseImage";
 import { userRole, userStatus } from "utils/constans";
 
-const UserAddNew = () => {
+const UserUpdate = () => {
   const {
     control,
-    watch,
     handleSubmit,
-    getValues,
+    watch,
     setValue,
+    getValues,
     reset,
-    formState: { isSubmitting, isValid },
+    formState: { isSubmitting },
   } = useForm({
     mode: "onChange",
-    defaultValues: {
-      fullName: "",
-      username: "",
-      email: "",
-      password: "",
-      status: userStatus.ACTIVE,
-      role: userRole.ADMIN,
-      createAt: new Date(),
-    },
+    defaultValues: {},
   });
-  const {
-    handleSelectImage,
-    image,
-    progress,
-    handleResetUpload,
-    handleDeleteImage,
-  } = useFirebaseImage(setValue, getValues);
-  const handleCreateUser = async (values) => {
-    if (!isValid) return;
-    try {
-      const auth = getAuth();
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
-      await addDoc(collection(db, "users"), {
-        fullName: values.fullName,
-        email: values.email,
-        password: values.password,
-        username: slugify(values.username || values.fullName, {
-          lower: true,
-          replacement: " ",
-          trim: true,
-        }),
-        avatar: image,
-        status: Number(values.status),
-        role: Number(values.role),
-        createAt: serverTimestamp(),
-      });
-      reset({
-        fullName: "",
-        username: "",
-        email: "",
-        password: "",
-        status: userStatus.ACTIVE,
-        role: userRole.ADMIN,
-        createAt: new Date(),
-      });
-      handleResetUpload();
-      toast.success("create user successfully!", {
-        pauseOnHover: false,
-      });
-    } catch (error) {
-      toast.error("Can't create new user");
-    }
-  };
+  const [params] = useSearchParams();
+  const userID = params.get("id");
+  const { handleDeleteImage, handleSelectImage, image, progress } =
+    useFirebaseImage(setValue, getValues);
   const watchStatus = watch("status");
   const watchRole = watch("role");
+  //reset values
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const colRef = doc(db, "users", userID);
+        const SingleUser = await getDoc(colRef);
+        reset(SingleUser?.data());
+        console.log(SingleUser?.data());
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchData();
+  }, [userID, reset]);
+  const handleUpdateUser = (values) => {
+    console.log(values);
+  };
+  if (!userID) return;
   return (
     <div>
       <DashboardHeading
-        title="New user"
-        desc="Add new user to system"
+        title="Update user"
+        desc={`Update your user id: ${userID}`}
       ></DashboardHeading>
-      <form onSubmit={handleSubmit(handleCreateUser)}>
+      <form onSubmit={handleSubmit(handleUpdateUser)}>
         <div className="w-[200px] h-[200px] mx-auto rounded-full mb-10">
           <ImageUpload
             className="!rounded-full h-full"
@@ -212,4 +181,4 @@ const UserAddNew = () => {
   );
 };
 
-export default UserAddNew;
+export default UserUpdate;
