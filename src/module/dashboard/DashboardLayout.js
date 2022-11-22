@@ -1,4 +1,5 @@
 import { useAuth } from "context/auth-context";
+import HomePage from "pages/HomePage";
 import PageNotFound from "pages/PageNotFound";
 import React from "react";
 import { Outlet } from "react-router-dom";
@@ -39,7 +40,7 @@ const DashboardStyles = styled.div`
 `;
 const DashboardLayout = () => {
   const { userInfo } = useAuth();
-  if (!userInfo.uid) return <PageNotFound></PageNotFound>;
+  if (!userInfo.uid) return <HomePage></HomePage>;
   return (
     <DashboardStyles>
       <DashboardHeader></DashboardHeader>

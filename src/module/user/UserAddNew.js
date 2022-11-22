@@ -75,7 +75,7 @@ const UserAddNew = () => {
         createAt: new Date(),
       });
       handleResetUpload();
-      toast.success("create user successfully!", {
+      toast.success(`create new user ${values.email} successfully!`, {
         pauseOnHover: false,
       });
     } catch (error) {

@@ -1,3 +1,4 @@
+import { Button } from "component";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import UserTable from "./UserTable";
@@ -5,10 +6,11 @@ import UserTable from "./UserTable";
 const UserManage = () => {
   return (
     <div>
-      <DashboardHeading
-        title="Users"
-        desc="Manage your user"
-      ></DashboardHeading>
+      <DashboardHeading title="Users" desc="Manage your user">
+        <Button kind="ghost" to="/manage/add-user">
+          create user
+        </Button>
+      </DashboardHeading>
       <UserTable></UserTable>
     </div>
   );

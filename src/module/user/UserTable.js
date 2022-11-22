@@ -102,7 +102,7 @@ const UserTable = () => {
           </div>
         </td>
         <td>{user?.username || "Hạ My"}</td>
-        <td>{user?.email.substr(0, 5) + "..."}</td>
+        <td title={user.email}>{user?.email.substr(0, 5) + "..."}</td>
         <td>{renderLabelStatus(Number(user?.status) || 3)}</td>
         <td>{renderLabelRole(Number(user?.role) || 2)}</td>
         <td>

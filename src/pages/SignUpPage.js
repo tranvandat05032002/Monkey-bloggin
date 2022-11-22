@@ -1,7 +1,3 @@
-// import { Button } from "component/button";
-// import Field from "component/field/Field";
-// import { Input, InputPasswordToggle } from "component/input";
-// import { Label } from "component/label";
 import { Button, Field, Input, InputPasswordToggle, Label } from "component";
 import React from "react";
 import { useForm } from "react-hook-form";
