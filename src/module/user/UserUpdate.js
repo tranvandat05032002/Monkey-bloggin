@@ -26,7 +26,7 @@ const UserUpdate = () => {
     setValue,
     getValues,
     reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
   } = useForm({
     mode: "onChange",
     defaultValues: {},
@@ -34,11 +34,41 @@ const UserUpdate = () => {
   const [params] = useSearchParams();
   const userID = params.get("id");
   const navigate = useNavigate();
-  const { handleDeleteImage, handleSelectImage, image, progress } =
-    useFirebaseImage(setValue, getValues);
   const watchStatus = watch("status");
   const watchRole = watch("role");
   const imageURL = getValues("avatar");
+  const imageRegex = /%2F(\S+)\?/gm.exec(imageURL);
+  const imageName = imageRegex?.length > 0 ? imageRegex[1] : "";
+
+  const { handleDeleteImage, handleSelectImage, progress, setImage, image } =
+    useFirebaseImage(setValue, getValues, imageName, DeleteImageFireStore);
+  const handleUpdateUser = async (values) => {
+    if (!isValid) return;
+    try {
+      const colRef = doc(db, "users", userID);
+      await updateDoc(colRef, {
+        ...values,
+        avatar: image,
+      });
+      toast.success("Update user successfully!");
+      setTimeout(() => {
+        navigate("/manage/user");
+      }, 2000);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  async function DeleteImageFireStore() {
+    const colRef = doc(db, "users", userID);
+    await updateDoc(colRef, {
+      avatar: "",
+    });
+  }
+
+  React.useEffect(() => {
+    setImage(imageURL);
+  }, [imageURL, setImage]);
+
   //reset values
   React.useEffect(() => {
     if (!userID) return;
@@ -54,30 +84,6 @@ const UserUpdate = () => {
     };
     fetchData();
   }, [userID, reset]);
-  const handleUpdateUser = async (values) => {
-    console.log(values);
-    try {
-      const colRef = doc(db, "users", userID);
-      await updateDoc(colRef, {
-        email: values?.email,
-        fullName: values?.fullName,
-        password: values?.password,
-        username: slugify(values?.username || values?.fullName, {
-          lower: true,
-          replacement: " ",
-          trim: true,
-          status: values?.status,
-          role: values?.role,
-        }),
-      });
-      toast.success("Update user successfully!");
-      setTimeout(() => {
-        navigate("/manage/user");
-      }, 2000);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
   if (!userID) return;
   return (
     <div>
@@ -92,7 +98,7 @@ const UserUpdate = () => {
             onChange={handleSelectImage}
             handleDeleteImage={handleDeleteImage}
             progress={progress}
-            image={imageURL}
+            image={image}
           ></ImageUpload>
         </div>
         <div className="form-layout">

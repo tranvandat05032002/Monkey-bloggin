@@ -7,8 +7,12 @@ import {
 } from "firebase/storage";
 import React from "react";
 import { toast } from "react-toastify";
-import slugify from "slugify";
-export default function useFirebaseImage(setValue, getValues) {
+export default function useFirebaseImage(
+  setValue,
+  getValues,
+  imageName = null,
+  cb = null
+) {
   const [progress, setProgress] = React.useState(0);
   const [image, setImage] = React.useState("");
   if (!setValue || !getValues) return;
@@ -16,7 +20,10 @@ export default function useFirebaseImage(setValue, getValues) {
     const storage = getStorage();
 
     // Create a reference to the file to delete
-    const desertRef = ref(storage, "images/" + getValues("image_name"));
+    const desertRef = ref(
+      storage,
+      "images/" + imageName || getValues("image_name")
+    );
 
     // Delete the file
     deleteObject(desertRef)
@@ -24,6 +31,7 @@ export default function useFirebaseImage(setValue, getValues) {
         console.log("Remove image successfully");
         setImage("");
         setProgress(0);
+        cb && cb();
       })
       .catch((error) => {
         console.log("Can not delete image");
@@ -85,6 +93,7 @@ export default function useFirebaseImage(setValue, getValues) {
   return {
     progress,
     image,
+    setImage,
     handleSelectImage,
     handleDeleteImage,
     handleResetUpload,

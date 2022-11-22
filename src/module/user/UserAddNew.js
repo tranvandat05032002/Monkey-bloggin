@@ -14,6 +14,7 @@ import useFirebaseImage from "hooks/useFirebaseImage";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import slugify from "slugify";
 import { userRole, userStatus } from "utils/constans";
@@ -78,12 +79,16 @@ const UserAddNew = () => {
       toast.success(`create new user ${values.email} successfully!`, {
         pauseOnHover: false,
       });
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (error) {
       toast.error("Can't create new user");
     }
   };
   const watchStatus = watch("status");
   const watchRole = watch("role");
+  const navigate = useNavigate();
   return (
     <div>
       <DashboardHeading
