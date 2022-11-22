@@ -26,6 +26,7 @@ const UserTable = () => {
   const navigate = useNavigate();
   const [valueFilter, setValueFilter] = React.useState("");
   const [lastUser, setLastUser] = React.useState();
+  const [totalPage, setTotalPage] = React.useState(0);
   React.useEffect(() => {
     const colRef = collection(db, "users");
     onSnapshot(colRef, (snapShot) => {
@@ -131,6 +132,9 @@ const UserTable = () => {
       const documentSnapshots = await getDocs(newRef);
       const lastVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      onSnapshot(colRef, (snapShotSize) => {
+        setTotalPage(snapShotSize.size);
+      });
       onSnapshot(newRef, (snapShot) => {
         const cities = [];
         snapShot.forEach((doc) => {
@@ -145,7 +149,6 @@ const UserTable = () => {
     }
     fetchData();
   }, [valueFilter]);
-
   //Render userItem
   const RenderUserItem = (user) => {
     const format = new Date(user?.createAt?.seconds * 1000).toLocaleDateString(
@@ -213,9 +216,11 @@ const UserTable = () => {
           {userList.length > 0 && userList.map((user) => RenderUserItem(user))}
         </tbody>
       </Table>
-      <Button kind="ghost" className="" onClick={handleLoadMoreUser}>
-        See more+
-      </Button>
+      {totalPage > userList.length && (
+        <Button kind="ghost" className="" onClick={handleLoadMoreUser}>
+          See more+
+        </Button>
+      )}
     </div>
   );
 };
