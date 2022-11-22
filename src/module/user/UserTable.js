@@ -1,4 +1,4 @@
-import { Table } from "component";
+import { Button, Table } from "component";
 import { ActionDelete, ActionEdit } from "component/action";
 import { LabelStatus } from "component/label";
 import { db } from "firebase-app/firebase-config";
@@ -7,8 +7,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
+  limit,
   onSnapshot,
   query,
+  startAfter,
   where,
 } from "firebase/firestore";
 import { debounce } from "lodash";
@@ -22,6 +25,7 @@ const UserTable = () => {
   const [userList, setUserList] = React.useState([]);
   const navigate = useNavigate();
   const [valueFilter, setValueFilter] = React.useState("");
+  const [lastUser, setLastUser] = React.useState();
   React.useEffect(() => {
     const colRef = collection(db, "users");
     onSnapshot(colRef, (snapShot) => {
@@ -88,29 +92,59 @@ const UserTable = () => {
   const handleFilterUser = debounce((e) => {
     setValueFilter(e.target.value);
   }, 500);
-  console.log(valueFilter);
-  //search user
-  React.useEffect(() => {
-    const colRef = collection(db, "users");
-    const newRef = valueFilter
-      ? query(
-          colRef,
-          where("fullName", ">=", valueFilter),
-          where("fullName", "<=", valueFilter + "utf8")
-        )
-      : colRef;
-    onSnapshot(newRef, (snapShot) => {
+
+  //Load more user
+  const handleLoadMoreUser = async () => {
+    // const first = query(collection(db, "cities"), limit(25));
+
+    const nextRef = query(
+      collection(db, "users"),
+      startAfter(lastUser || 0),
+      limit(1)
+    );
+    onSnapshot(nextRef, (snapShot) => {
       const cities = [];
       snapShot.forEach((doc) => {
         cities.push({
-          id: doc.id,
+          id: doc?.id,
           ...doc?.data(),
         });
       });
-      setUserList(cities);
+      setUserList([...userList, ...cities]);
     });
+    const documentSnapshots = await getDocs(nextRef);
+    const lastVisible =
+      documentSnapshots.docs[documentSnapshots.docs.length - 1];
+    setLastUser(lastVisible);
+  };
+  //search user
+  React.useEffect(() => {
+    async function fetchData() {
+      const colRef = collection(db, "users");
+      const newRef = valueFilter
+        ? query(
+            colRef,
+            where("fullName", ">=", valueFilter),
+            where("fullName", "<=", valueFilter + "utf8")
+          )
+        : query(colRef, limit(1));
+      const documentSnapshots = await getDocs(newRef);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      onSnapshot(newRef, (snapShot) => {
+        const cities = [];
+        snapShot.forEach((doc) => {
+          cities.push({
+            id: doc.id,
+            ...doc?.data(),
+          });
+        });
+        setUserList(cities);
+      });
+      setLastUser(lastVisible);
+    }
+    fetchData();
   }, [valueFilter]);
-  // console.log(valueFilter);
 
   //Render userItem
   const RenderUserItem = (user) => {
@@ -179,6 +213,9 @@ const UserTable = () => {
           {userList.length > 0 && userList.map((user) => RenderUserItem(user))}
         </tbody>
       </Table>
+      <Button kind="ghost" className="" onClick={handleLoadMoreUser}>
+        See more+
+      </Button>
     </div>
   );
 };
