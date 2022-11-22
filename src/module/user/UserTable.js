@@ -3,7 +3,15 @@ import { ActionDelete, ActionEdit } from "component/action";
 import { LabelStatus } from "component/label";
 import { db } from "firebase-app/firebase-config";
 import { deleteUser } from "firebase/auth";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { debounce } from "lodash";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -13,6 +21,7 @@ import { userRole, userStatus } from "utils/constans";
 const UserTable = () => {
   const [userList, setUserList] = React.useState([]);
   const navigate = useNavigate();
+  const [valueFilter, setValueFilter] = React.useState("");
   React.useEffect(() => {
     const colRef = collection(db, "users");
     onSnapshot(colRef, (snapShot) => {
@@ -75,10 +84,36 @@ const UserTable = () => {
       }
     });
   };
+  //handle filter user
+  const handleFilterUser = debounce((e) => {
+    setValueFilter(e.target.value);
+  }, 500);
+  console.log(valueFilter);
+  //search user
+  React.useEffect(() => {
+    const colRef = collection(db, "users");
+    const newRef = valueFilter
+      ? query(
+          colRef,
+          where("fullName", ">=", valueFilter),
+          where("fullName", "<=", valueFilter + "utf8")
+        )
+      : colRef;
+    onSnapshot(newRef, (snapShot) => {
+      const cities = [];
+      snapShot.forEach((doc) => {
+        cities.push({
+          id: doc.id,
+          ...doc?.data(),
+        });
+      });
+      setUserList(cities);
+    });
+  }, [valueFilter]);
+  // console.log(valueFilter);
 
   //Render userItem
   const RenderUserItem = (user) => {
-    console.log(user);
     const format = new Date(user?.createAt?.seconds * 1000).toLocaleDateString(
       "vi-VI"
     );
@@ -120,6 +155,14 @@ const UserTable = () => {
   };
   return (
     <div>
+      <div className="flex justify-end w-full mb-10">
+        <input
+          type="text"
+          className="w-full px-4 py-2 border border-gray-300 rounded-sm outline-none"
+          placeholder="Search User"
+          onChange={handleFilterUser}
+        />
+      </div>
       <Table>
         <thead>
           <tr>
