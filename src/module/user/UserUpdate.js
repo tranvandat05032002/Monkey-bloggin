@@ -10,11 +10,13 @@ import {
 } from "component";
 import DashboardHeading from "module/dashboard/DashboardHeading";
 import { useForm } from "react-hook-form";
-import { useSearchParams } from "react-router-dom";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "firebase-app/firebase-config";
 import useFirebaseImage from "hooks/useFirebaseImage";
 import { userRole, userStatus } from "utils/constans";
+import slugify from "slugify";
+import { toast } from "react-toastify";
 
 const UserUpdate = () => {
   const {
@@ -31,12 +33,15 @@ const UserUpdate = () => {
   });
   const [params] = useSearchParams();
   const userID = params.get("id");
+  const navigate = useNavigate();
   const { handleDeleteImage, handleSelectImage, image, progress } =
     useFirebaseImage(setValue, getValues);
   const watchStatus = watch("status");
   const watchRole = watch("role");
+  const imageURL = getValues("avatar");
   //reset values
   React.useEffect(() => {
+    if (!userID) return;
     const fetchData = async () => {
       try {
         const colRef = doc(db, "users", userID);
@@ -49,8 +54,29 @@ const UserUpdate = () => {
     };
     fetchData();
   }, [userID, reset]);
-  const handleUpdateUser = (values) => {
+  const handleUpdateUser = async (values) => {
     console.log(values);
+    try {
+      const colRef = doc(db, "users", userID);
+      await updateDoc(colRef, {
+        email: values?.email,
+        fullName: values?.fullName,
+        password: values?.password,
+        username: slugify(values?.username || values?.fullName, {
+          lower: true,
+          replacement: " ",
+          trim: true,
+          status: values?.status,
+          role: values?.role,
+        }),
+      });
+      toast.success("Update user successfully!");
+      setTimeout(() => {
+        navigate("/manage/user");
+      }, 2000);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   if (!userID) return;
   return (
@@ -66,7 +92,7 @@ const UserUpdate = () => {
             onChange={handleSelectImage}
             handleDeleteImage={handleDeleteImage}
             progress={progress}
-            image={image}
+            image={imageURL}
           ></ImageUpload>
         </div>
         <div className="form-layout">
@@ -174,7 +200,7 @@ const UserUpdate = () => {
           disabled={isSubmitting}
           type="submit"
         >
-          Add new user
+          Update user
         </Button>
       </form>
     </div>
